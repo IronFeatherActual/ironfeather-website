@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Iron Feather — IronFeatherActual</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dim: #6b5520;
+  --gold-glow: rgba(201,168,76,0.15);
+  --navy: #080f1c;
+  --navy-mid: #0d1826;
+  --navy-card: #111e33;
+  --navy-light: #1a2d4a;
+  --white: #eeeae0;
+  --grey: #7a8fa8;
+  --grey-light: #a8bcd4;
+  --red: #8b2020;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Crimson Pro', Georgia, serif;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+/* ─── STAR FIELD ─── */
+#starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle var(--dur) ease-in-out infinite alternate;
+  animation-delay: var(--delay);
+}
+@keyframes twinkle {
+  from { opacity: var(--min-op); transform: scale(1); }
+  to   { opacity: var(--max-op); transform: scale(1.4); }
+}
+
+/* ─── SCANLINE OVERLAY ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: linear-gradient(to bottom, rgba(8,15,28,0.97), rgba(8,15,28,0.8));
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  backdrop-filter: blur(12px);
+}
+.nav-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-logo span { color: var(--white); font-weight: 400; }
+.nav-feather {
+  width: 18px; height: 18px;
+  fill: var(--gold);
+}
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--grey);
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+/* ─── SECTIONS ─── */
+section { position: relative; z-index: 1; }
+
+/* ─── HERO ─── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 32px 60px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.45em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  animation: fadeUp 1s ease 0.2s both;
+}
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3.5rem, 10vw, 7.5rem);
+  font-weight: 900;
+  line-height: 0.9;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 80px rgba(201,168,76,0.2), 0 0 160px rgba(201,168,76,0.08);
+  animation: fadeUp 1s ease 0.4s both;
+}
+.hero-title .thin {
+  display: block;
+  font-weight: 400;
+  font-size: 0.55em;
+  color: var(--white);
+  letter-spacing: 0.35em;
+  margin-top: 8px;
+}
+.hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 32px auto;
+  width: 320px;
+  animation: fadeUp 1s ease 0.6s both;
+}
+.hero-divider-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dim));
+}
+.hero-divider-line.r {
+  background: linear-gradient(to left, transparent, var(--gold-dim));
+}
+.hero-divider-gem { color: var(--gold); font-size: 0.8rem; }
+.hero-motto {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
+  letter-spacing: 0.4em;
+  color: var(--grey-light);
+  text-transform: uppercase;
+  animation: fadeUp 1s ease 0.8s both;
+}
+.hero-motto span { color: var(--gold); }
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp 1s ease 1s both;
+}
+.btn-primary {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  background: var(--gold);
+  color: var(--navy);
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s;
+  border: 2px solid var(--gold);
+}
+.btn-primary:hover {
+  background: transparent;
+  color: var(--gold);
+  box-shadow: 0 0 24px rgba(201,168,76,0.2);
+}
+.btn-secondary {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  background: transparent;
+  color: var(--grey-light);
+  text-decoration: none;
+  border: 1px solid rgba(201,168,76,0.25);
+  transition: all 0.2s;
+}
+.btn-secondary:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: fadeUp 1s ease 1.4s both;
+}
+.hero-scroll span {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.2); }
+}
+
+/* ─── SECTION WRAPPER ─── */
+.section-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 40px;
+}
+.section-header {
+  margin-bottom: 56px;
+}
+.section-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-heading {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+}
+.section-heading em {
+  font-style: normal;
+  color: var(--white);
+}
+.section-rule {
+  width: 80px; height: 1px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  margin-top: 16px;
+}
+
+/* ─── ABOUT ─── */
+#about { background: var(--navy); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+.about-text p {
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: var(--grey-light);
+  margin-bottom: 20px;
+}
+.about-text p em { color: var(--gold-light); font-style: italic; }
+.about-text p strong { color: var(--white); }
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.stat-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.1);
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(to right, var(--gold), transparent);
+}
+.stat-card:hover {
+  border-color: rgba(201,168,76,0.3);
+  transform: translateY(-2px);
+}
+.stat-icon {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+.stat-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.stat-val {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--gold-light);
+  font-weight: 600;
+}
+.about-quote {
+  grid-column: 1 / -1;
+  border-left: 3px solid var(--gold);
+  padding: 20px 28px;
+  background: rgba(201,168,76,0.03);
+  margin-top: 8px;
+}
+.about-quote p {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--white);
+  line-height: 1.7;
+}
+.about-quote cite {
+  display: block;
+  margin-top: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  font-style: normal;
+}
+
+/* ─── LORE ─── */
+#lore {
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-top: 1px solid rgba(201,168,76,0.06);
+  border-bottom: 1px solid rgba(201,168,76,0.06);
+}
+.lore-body p {
+  font-size: 1.08rem;
+  line-height: 1.95;
+  color: var(--grey-light);
+  margin-bottom: 22px;
+}
+.lore-body p em { color: var(--gold-light); font-style: italic; }
+.lore-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+.lore-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  padding: 7px 16px;
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--gold);
+  text-transform: uppercase;
+  background: rgba(201,168,76,0.03);
+}
+.lore-dossier {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.12);
+  padding: 32px;
+  margin-top: 48px;
+  position: relative;
+}
+.lore-dossier::before {
+  content: '// DOSSIER //';
+  position: absolute;
+  top: -10px; left: 24px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  background: var(--navy-card);
+  padding: 0 10px;
+}
+.dossier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+}
+.dossier-field {}
+.dossier-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.dossier-value {
+  font-family: 'Cinzel', serif;
+  font-size: 0.88rem;
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* ─── CONTENT / STREAM ─── */
+#content { background: var(--navy); }
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.content-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.08);
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.content-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.content-card:hover {
+  border-color: rgba(201,168,76,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+.content-card:hover::after { transform: scaleX(1); }
+.content-icon { font-size: 2rem; margin-bottom: 16px; }
+.content-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  margin-bottom: 10px;
+}
+.content-desc {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--grey);
+}
+
+/* ─── ORG ─── */
+#org {
+  background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy) 100%);
+  border-top: 1px solid rgba(201,168,76,0.06);
+}
+.org-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 64px;
+  align-items: center;
+}
+@media (max-width: 768px) { .org-layout { grid-template-columns: 1fr; } }
+.org-seal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.org-seal-ring {
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  border: 2px solid rgba(201,168,76,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: rotateSlow 40s linear infinite;
+}
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.org-seal-inner {
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.12);
+  background: radial-gradient(circle, rgba(201,168,76,0.04), transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  animation: rotateSlow 40s linear infinite reverse;
+}
+.org-seal-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+.org-seal-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  text-align: center;
+}
+.org-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); margin: 4px auto; }
+.org-text p {
+  font-size: 1.08rem;
+  line-height: 1.9;
+  color: var(--grey-light);
+  margin-bottom: 20px;
+}
+.org-text p em { color: var(--gold-light); font-style: italic; }
+.org-text p strong { color: var(--white); }
+
+/* ─── MERCH ─── */
+#merch {
+  background: var(--navy);
+  border-top: 1px solid rgba(201,168,76,0.06);
+}
+.merch-intro {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--grey-light);
+  max-width: 620px;
+  margin-bottom: 48px;
+}
+.merch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 48px;
+}
+.merch-item {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.1);
+  padding: 36px 24px;
+  text-align: center;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.merch-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(201,168,76,0.04), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.merch-item:hover {
+  border-color: rgba(201,168,76,0.3);
+  transform: translateY(-4px);
+}
+.merch-item:hover::before { opacity: 1; }
+.merch-item-icon { font-size: 2.5rem; margin-bottom: 16px; }
+.merch-item-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--white);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.merch-item-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+}
+.merch-cta-block {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.15);
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.merch-cta-text h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  color: var(--gold-light);
+  margin-bottom: 8px;
+}
+.merch-cta-text p {
+  font-size: 0.95rem;
+  color: var(--grey);
+  line-height: 1.6;
+}
+
+/* ─── SOCIAL ─── */
+#social {
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-top: 1px solid rgba(201,168,76,0.06);
+}
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.social-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.08);
+  padding: 28px 24px;
+  text-decoration: none;
+  display: block;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.social-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--gold);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.25s;
+}
+.social-card:hover {
+  border-color: rgba(201,168,76,0.25);
+  transform: translateX(4px);
+}
+.social-card:hover::before { transform: scaleY(1); }
+.social-platform {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.social-handle {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--white);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.social-desc {
+  font-size: 0.88rem;
+  color: var(--grey);
+  line-height: 1.5;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(201,168,76,0.1);
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+.footer-logo span { color: var(--white); font-weight: 400; }
+.footer-motto {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+}
+.footer-copy {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: rgba(122,143,168,0.4);
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 640px) {
+  nav { padding: 0 20px; }
+  .nav-links { gap: 20px; }
+  .section-wrap { padding: 70px 20px; }
+  .merch-cta-block { padding: 28px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- STAR FIELD -->
+<div id="starfield"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <svg class="nav-feather" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.416 2C20.416 2 10 4 6 12c-1.5 3-1.5 6-1 8l2-2s0-3 2-6c0 0 1 3 0 6l2-1s1-4 3-6c0 0 0 3-1 5l2-1s2-4 5-7c-1 2-2 5-2 8h2c1-5 2-10 2-14z"/>
+    </svg>
+    Iron<span>Feather</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#lore">Lore</a></li>
+    <li><a href="#content">Stream</a></li>
+    <li><a href="#org">Org</a></li>
+    <li><a href="#merch">Merch</a></li>
+    <li><a href="#social">Socials</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow">// Operator · Pilot · Streamer //</div>
+  <h1 class="hero-title">
+    Iron Feather
+    <span class="thin">IronFeatherActual</span>
+  </h1>
+  <div class="hero-divider">
+    <div class="hero-divider-line"></div>
+    <div class="hero-divider-gem">✦</div>
+    <div class="hero-divider-line r"></div>
+  </div>
+  <p class="hero-motto">
+    <span>Focus</span> &nbsp;·&nbsp; <span>Elevate</span> &nbsp;·&nbsp; <span>Conquer</span>
+  </p>
+  <div class="hero-cta">
+    <a href="https://www.twitch.tv/ironfeather_golf" class="btn-primary" target="_blank">Watch Live</a>
+    <a href="https://streamlabs.com/toatsoulindustries/merch" class="btn-secondary" target="_blank">View Merch</a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 01 — About //</div>
+      <h2 class="section-heading">Who is <em>IronFeatherActual</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          <em>IronFeatherActual</em> is a Star Citizen streamer and independent operator who does a little bit of everything the 'verse has to offer — and does all of it well. Mining, hauling, ground combat, ship combat. No specialization. Maximum adaptability.
+        </p>
+        <p>
+          The <strong>Iron Feather</strong> brand was built on a simple idea: the iron is the resolve that gets the job done, the feather is the precision that does it right. Together they define a standard — not a ceiling.
+        </p>
+        <p>
+          Every stream is live, unfiltered, and unpredictable — because that's what the 'verse actually is. Whether a mining run goes sideways, a freight route turns into a firefight, or everything goes exactly to plan, you'll see it all happen in real time.
+        </p>
+      </div>
+      <div>
+        <div class="about-stats reveal">
+          <div class="stat-card">
+            <div class="stat-icon">⛏️</div>
+            <div class="stat-title">Specialty</div>
+            <div class="stat-val">Mining Ops</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🚀</div>
+            <div class="stat-title">Role</div>
+            <div class="stat-val">Combat Pilot</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🚛</div>
+            <div class="stat-title">Trade</div>
+            <div class="stat-val">Freight Runner</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🔫</div>
+            <div class="stat-title">Ground</div>
+            <div class="stat-val">Tactical Operator</div>
+          </div>
+        </div>
+        <div class="about-quote reveal" style="margin-top:20px;">
+          <p>"I don't work for empires. I work alongside people worth flying with."</p>
+          <cite>— IronFeatherActual</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LORE -->
+<section id="lore">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 02 — Lore //</div>
+      <h2 class="section-heading">The <em>Backstory</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="lore-body reveal">
+      <p>
+        Born in the lower commercial districts of <em>ArcCorp — Area 18</em>, Caelus "Iron" Ferrox grew up beneath a sky he couldn't see. ArcCorp is a planet that ate its own horizon — every surface paved, every skyline owned by a corporation, every citizen a resource on someone's balance sheet. His mother worked logistics for a mid-tier shipping firm. His father ran security detail for an ArcCorp subsidiary until the contract dried up and so did he.
+      </p>
+      <p>
+        Caelus learned early that on ArcCorp, you either climb the corporate ladder or you get swept under it. He chose a third option — he left. At seventeen he signed on as a deck hand on a freelance hauler operating out of Stanton. By twenty-two, he held a UEE combat pilot certification earned the hard way through contracted escort runs in jump corridors that polite pilots avoided.
+      </p>
+      <p>
+        He took the callsign <em>IronFeatherActual</em> as a statement: the iron is the resolve forged in ArcCorp's concrete canyons, the feather is the precision that kept him alive out in the black, and <em>Actual</em> means you're always talking to the one who makes the calls.
+      </p>
+      <p>
+        Today he operates across Stanton and beyond — pulling ore from asteroid fields, running freight through contested lanes, and taking ground and space combat contracts when the credits demand it. He found <em>Roma Stellarum</em> not through recruitment, but through reputation. They heard his callsign before they met the man. That's how he prefers it.
+      </p>
+      <div class="lore-tags">
+        <span class="lore-tag">ArcCorp Native</span>
+        <span class="lore-tag">Former Escort Pilot</span>
+        <span class="lore-tag">Independent Contractor</span>
+        <span class="lore-tag">Roma Stellarum</span>
+        <span class="lore-tag">Stanton Operator</span>
+        <span class="lore-tag">Versatile Class</span>
+      </div>
+    </div>
+    <div class="lore-dossier reveal">
+      <div class="dossier-grid">
+        <div class="dossier-field">
+          <div class="dossier-label">Callsign</div>
+          <div class="dossier-value">IronFeatherActual</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Birth Location</div>
+          <div class="dossier-value">ArcCorp · Area 18</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Affiliation</div>
+          <div class="dossier-value">Roma Stellarum</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Operator Class</div>
+          <div class="dossier-value">Versatile</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Status</div>
+          <div class="dossier-value">Active · Independent</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Clearance</div>
+          <div class="dossier-value">UEE Combat Certified</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT / STREAM -->
+<section id="content">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 03 — Stream //</div>
+      <h2 class="section-heading">What We <em>Do Here</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="content-grid">
+      <div class="content-card reveal">
+        <div class="content-icon">⛏️</div>
+        <div class="content-title">Mining Operations</div>
+        <div class="content-desc">Deep-core asteroid runs, quantanium extraction, and the satisfying grind of pulling ore from the black. Relaxed, commentary-heavy, and occasionally very explosive.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🚛</div>
+        <div class="content-title">Freight & Hauling</div>
+        <div class="content-desc">High-value cargo runs through contested territory. Every route is a calculated risk. Watch live as the math either works out — or doesn't.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🚀</div>
+        <div class="content-title">Ship Combat</div>
+        <div class="content-desc">Escort missions, pirate engagements, org fleet operations. The kind of dogfights that end up in highlight reels. Or hard lessons. Sometimes both.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🔫</div>
+        <div class="content-title">Ground Ops</div>
+        <div class="content-desc">Bunker runs, outpost assaults, and tactical ground combat across moons and planets. Boots on the ground, eyes on the objective.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🏛️</div>
+        <div class="content-title">Roma Stellarum Events</div>
+        <div class="content-desc">Org fleet operations, multi-crew missions, and large-scale coordinated play. The 'verse is better with people worth flying alongside.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🌌</div>
+        <div class="content-title">Exploration & Lore</div>
+        <div class="content-desc">Star Citizen has one of the richest universes in gaming. Expect deep dives, lore discussions, and the occasional philosophical tangent at 2am.</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top: 48px;" class="reveal">
+      <a href="https://www.twitch.tv/ironfeather_golf" class="btn-primary" target="_blank">Watch Live on Twitch →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ORG -->
+<section id="org">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 04 — Organization //</div>
+      <h2 class="section-heading">Roma <em>Stellarum</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="org-layout">
+      <div class="org-seal reveal">
+        <div class="org-seal-ring">
+          <div class="org-seal-inner">
+            <div class="org-seal-name">ROMA</div>
+            <div class="org-dot"></div>
+            <div class="org-seal-name">STELLARUM</div>
+            <div style="margin-top:8px;">
+              <div class="org-seal-subtitle">Rome of the Stars</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="org-text reveal">
+        <p>
+          <em>Roma Stellarum</em> — Rome of the Stars. An organization built not on blind loyalty to empire, but on the strength of those who fly together. The Roman aesthetic isn't nostalgia. It's a philosophy: discipline, purpose, and the understanding that civilization is built by those who show up.
+        </p>
+        <p>
+          IronFeatherActual found Roma Stellarum through reputation rather than recruitment. After holding a position during a contested mining operation while outnumbered, no introductions were needed. <strong>Actions spoke first.</strong>
+        </p>
+        <p>
+          Within the org, he operates as a <em>Versatile Operator</em> — the kind of pilot who fills whatever gap the mission demands. No rank-chasing. No politics. Just results.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCH -->
+<section id="merch">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 05 — Merch //</div>
+      <h2 class="section-heading">Iron Feather <em>Store</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <p class="merch-intro reveal">
+      Rep the brand. Wear the callsign. Every piece is designed around the Iron Feather identity — built for people who operate with focus, precision, and no excuses.
+    </p>
+    <div class="merch-grid">
+      <div class="merch-item reveal">
+        <div class="merch-item-icon">👕</div>
+        <div class="merch-item-name">Tees & Shirts</div>
+        <div class="merch-item-sub">Iron Feather branded apparel</div>
+      </div>
+      <div class="merch-item reveal">
+        <div class="merch-item-icon">🧥</div>
+        <div class="merch-item-name">Hoodies</div>
+        <div class="merch-item-sub">For cold ops and cold nights</div>
+      </div>
+      <div class="merch-item reveal">
+        <div class="merch-item-icon">☕</div>
+        <div class="merch-item-name">Mugs & Drinkware</div>
+        <div class="merch-item-sub">Focus. Elevate. Conquer. — daily</div>
+      </div>
+      <div class="merch-item reveal">
+        <div class="merch-item-icon">🎒</div>
+        <div class="merch-item-name">Accessories</div>
+        <div class="merch-item-sub">Hats, bags & more</div>
+      </div>
+    </div>
+    <div class="merch-cta-block reveal">
+      <div class="merch-cta-text">
+        <h3>Visit the Full Store</h3>
+        <p>All merch is printed on demand and ships worldwide. Powered by Streamlabs.</p>
+      </div>
+      <a href="https://streamlabs.com/toatsoulindustries/merch" class="btn-primary" target="_blank">Shop Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section id="social">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 06 — Socials //</div>
+      <h2 class="section-heading">Find <em>IronFeatherActual</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="social-grid">
+      <a href="https://www.twitch.tv/ironfeather_golf" class="social-card reveal" target="_blank">
+        <div class="social-platform">// Twitch //</div>
+        <div class="social-handle">/ironfeather_golf</div>
+        <div class="social-desc">Live Star Citizen — mining, hauling, combat, and the occasional disaster. Always live, always real.</div>
+      </a>
+      <a href="https://twitter.com/ironfeather" class="social-card reveal" target="_blank">
+        <div class="social-platform">// Twitter · X //</div>
+        <div class="social-handle">@IronFeather</div>
+        <div class="social-desc">Stream updates, Star Citizen takes, and whatever the 'verse throws at us today.</div>
+      </a>
+      <a href="https://instagram.com/ironfeather" class="social-card reveal" target="_blank">
+        <div class="social-platform">// Instagram //</div>
+        <div class="social-handle">@IronFeather</div>
+        <div class="social-desc">Behind the stream, brand visuals, and life as an independent operator.</div>
+      </a>
+      <a href="https://youtube.com/@ironfeather" class="social-card reveal" target="_blank">
+        <div class="social-platform">// YouTube //</div>
+        <div class="social-handle">@IronFeather</div>
+        <div class="social-desc">VODs, highlight reels, and deep-dive Star Citizen content. The archive lives here.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Iron<span>Feather</span></div>
+  <div class="footer-motto">Focus · Elevate · Conquer</div>
+  <div class="footer-copy">© IronFeatherActual · Roma Stellarum · All rights reserved</div>
+</footer>
+
+<script>
+// ─── STAR FIELD ───
+const sf = document.getElementById('starfield');
+for (let i = 0; i < 220; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.2 + 0.4;
+  const minOp = (0.05 + Math.random() * 0.1).toFixed(2);
+  const maxOp = (0.4 + Math.random() * 0.5).toFixed(2);
+  s.style.cssText = `
+    width:${size}px;height:${size}px;
+    top:${Math.random()*100}%;
+    left:${Math.random()*100}%;
+    --dur:${2+Math.random()*5}s;
+    --delay:${Math.random()*6}s;
+    --min-op:${minOp};
+    --max-op:${maxOp};
+  `;
+  sf.appendChild(s);
+}
+
+// ─── SCROLL REVEAL ───
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// ─── NAV ACTIVE ───
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--gold)' : '';
+  });
+});
+</script>
+</body>
+</html>
