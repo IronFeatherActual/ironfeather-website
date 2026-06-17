@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Iron Feather — IronFeatherActual</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dim: #6b5520;
+  --gold-glow: rgba(201,168,76,0.15);
+  --navy: #080f1c;
+  --navy-mid: #0d1826;
+  --navy-card: #111e33;
+  --navy-light: #1a2d4a;
+  --white: #eeeae0;
+  --grey: #7a8fa8;
+  --grey-light: #a8bcd4;
+  --red: #8b2020;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Crimson Pro', Georgia, serif;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+/* ─── STAR FIELD ─── */
+#starfield {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle var(--dur) ease-in-out infinite alternate;
+  animation-delay: var(--delay);
+}
+@keyframes twinkle {
+  from { opacity: var(--min-op); transform: scale(1); }
+  to   { opacity: var(--max-op); transform: scale(1.4); }
+}
+
+/* ─── SCANLINE OVERLAY ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: linear-gradient(to bottom, rgba(8,15,28,0.97), rgba(8,15,28,0.8));
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  backdrop-filter: blur(12px);
+}
+.nav-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-logo span { color: var(--white); font-weight: 400; }
+.nav-feather {
+  width: 18px; height: 18px;
+  fill: var(--gold);
+}
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--grey);
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+/* ─── SECTIONS ─── */
+section { position: relative; z-index: 1; }
+
+/* ─── HERO ─── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 32px 60px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.45em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  animation: fadeUp 1s ease 0.2s both;
+}
+.hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3.5rem, 10vw, 7.5rem);
+  font-weight: 900;
+  line-height: 0.9;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 80px rgba(201,168,76,0.2), 0 0 160px rgba(201,168,76,0.08);
+  animation: fadeUp 1s ease 0.4s both;
+}
+.hero-title .thin {
+  display: block;
+  font-weight: 400;
+  font-size: 0.55em;
+  color: var(--white);
+  letter-spacing: 0.35em;
+  margin-top: 8px;
+}
+.hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 32px auto;
+  width: 320px;
+  animation: fadeUp 1s ease 0.6s both;
+}
+.hero-divider-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-dim));
+}
+.hero-divider-line.r {
+  background: linear-gradient(to left, transparent, var(--gold-dim));
+}
+.hero-divider-gem { color: var(--gold); font-size: 0.8rem; }
+.hero-motto {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
+  letter-spacing: 0.4em;
+  color: var(--grey-light);
+  text-transform: uppercase;
+  animation: fadeUp 1s ease 0.8s both;
+}
+.hero-motto span { color: var(--gold); }
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp 1s ease 1s both;
+}
+.btn-primary {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  background: var(--gold);
+  color: var(--navy);
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s;
+  border: 2px solid var(--gold);
+}
+.btn-primary:hover {
+  background: transparent;
+  color: var(--gold);
+  box-shadow: 0 0 24px rgba(201,168,76,0.2);
+}
+.btn-secondary {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  background: transparent;
+  color: var(--grey-light);
+  text-decoration: none;
+  border: 1px solid rgba(201,168,76,0.25);
+  transition: all 0.2s;
+}
+.btn-secondary:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: fadeUp 1s ease 1.4s both;
+}
+.hero-scroll span {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.2); }
+}
+
+/* ─── SECTION WRAPPER ─── */
+.section-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 40px;
+}
+.section-header {
+  margin-bottom: 56px;
+}
+.section-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-heading {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+}
+.section-heading em {
+  font-style: normal;
+  color: var(--white);
+}
+.section-rule {
+  width: 80px; height: 1px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  margin-top: 16px;
+}
+
+/* ─── ABOUT ─── */
+#about { background: var(--navy); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+.about-text p {
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: var(--grey-light);
+  margin-bottom: 20px;
+}
+.about-text p em { color: var(--gold-light); font-style: italic; }
+.about-text p strong { color: var(--white); }
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.stat-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.1);
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(to right, var(--gold), transparent);
+}
+.stat-card:hover {
+  border-color: rgba(201,168,76,0.3);
+  transform: translateY(-2px);
+}
+.stat-icon {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+.stat-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.stat-val {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--gold-light);
+  font-weight: 600;
+}
+.about-quote {
+  grid-column: 1 / -1;
+  border-left: 3px solid var(--gold);
+  padding: 20px 28px;
+  background: rgba(201,168,76,0.03);
+  margin-top: 8px;
+}
+.about-quote p {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: var(--white);
+  line-height: 1.7;
+}
+.about-quote cite {
+  display: block;
+  margin-top: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  font-style: normal;
+}
+
+/* ─── LORE ─── */
+#lore {
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-top: 1px solid rgba(201,168,76,0.06);
+  border-bottom: 1px solid rgba(201,168,76,0.06);
+}
+.lore-body p {
+  font-size: 1.08rem;
+  line-height: 1.95;
+  color: var(--grey-light);
+  margin-bottom: 22px;
+}
+.lore-body p em { color: var(--gold-light); font-style: italic; }
+.lore-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+.lore-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  padding: 7px 16px;
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--gold);
+  text-transform: uppercase;
+  background: rgba(201,168,76,0.03);
+}
+.lore-dossier {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.12);
+  padding: 32px;
+  margin-top: 48px;
+  position: relative;
+}
+.lore-dossier::before {
+  content: '// DOSSIER //';
+  position: absolute;
+  top: -10px; left: 24px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  background: var(--navy-card);
+  padding: 0 10px;
+}
+.dossier-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+}
+.dossier-field {}
+.dossier-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.dossier-value {
+  font-family: 'Cinzel', serif;
+  font-size: 0.88rem;
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* ─── CONTENT / STREAM ─── */
+#content { background: var(--navy); }
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.content-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.08);
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.content-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.content-card:hover {
+  border-color: rgba(201,168,76,0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+.content-card:hover::after { transform: scaleX(1); }
+.content-icon { font-size: 2rem; margin-bottom: 16px; }
+.content-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  margin-bottom: 10px;
+}
+.content-desc {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--grey);
+}
+
+/* ─── ORG ─── */
+#org {
+  background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy) 100%);
+  border-top: 1px solid rgba(201,168,76,0.06);
+}
+.org-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 64px;
+  align-items: center;
+}
+@media (max-width: 768px) { .org-layout { grid-template-columns: 1fr; } }
+.org-seal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.org-seal-ring {
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  border: 2px solid rgba(201,168,76,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: rotateSlow 40s linear infinite;
+}
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.org-seal-inner {
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.12);
+  background: radial-gradient(circle, rgba(201,168,76,0.04), transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  animation: rotateSlow 40s linear infinite reverse;
+}
+.org-seal-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+.org-seal-subtitle {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  text-align: center;
+}
+.org-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); margin: 4px auto; }
+.org-text p {
+  font-size: 1.08rem;
+  line-height: 1.9;
+  color: var(--grey-light);
+  margin-bottom: 20px;
+}
+.org-text p em { color: var(--gold-light); font-style: italic; }
+.org-text p strong { color: var(--white); }
+
+/* ─── MERCH ─── */
+#merch {
+  background: var(--navy);
+  border-top: 1px solid rgba(201,168,76,0.06);
+}
+.merch-intro {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--grey-light);
+  max-width: 620px;
+  margin-bottom: 48px;
+}
+.merch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 48px;
+}
+.merch-item {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.1);
+  padding: 36px 24px;
+  text-align: center;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.merch-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(201,168,76,0.04), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.merch-item:hover {
+  border-color: rgba(201,168,76,0.3);
+  transform: translateY(-4px);
+}
+.merch-item:hover::before { opacity: 1; }
+.merch-item-icon { font-size: 2.5rem; margin-bottom: 16px; }
+.merch-item-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  color: var(--white);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.merch-item-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+}
+.merch-cta-block {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.15);
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.merch-cta-text h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  color: var(--gold-light);
+  margin-bottom: 8px;
+}
+.merch-cta-text p {
+  font-size: 0.95rem;
+  color: var(--grey);
+  line-height: 1.6;
+}
+
+/* ─── SOCIAL ─── */
+#social {
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-top: 1px solid rgba(201,168,76,0.06);
+}
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.social-card {
+  background: var(--navy-card);
+  border: 1px solid rgba(201,168,76,0.08);
+  padding: 28px 24px;
+  text-decoration: none;
+  display: block;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.social-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--gold);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.25s;
+}
+.social-card:hover {
+  border-color: rgba(201,168,76,0.25);
+  transform: translateX(4px);
+}
+.social-card:hover::before { transform: scaleY(1); }
+.social-platform {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.social-handle {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  color: var(--white);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.social-desc {
+  font-size: 0.88rem;
+  color: var(--grey);
+  line-height: 1.5;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(201,168,76,0.1);
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+}
+.footer-logo span { color: var(--white); font-weight: 400; }
+.footer-motto {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+}
+.footer-copy {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: rgba(122,143,168,0.4);
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 640px) {
+  nav { padding: 0 20px; }
+  .nav-links { gap: 20px; }
+  .section-wrap { padding: 70px 20px; }
+  .merch-cta-block { padding: 28px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- STAR FIELD -->
+<div id="starfield"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <svg class="nav-feather" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.416 2C20.416 2 10 4 6 12c-1.5 3-1.5 6-1 8l2-2s0-3 2-6c0 0 1 3 0 6l2-1s1-4 3-6c0 0 0 3-1 5l2-1s2-4 5-7c-1 2-2 5-2 8h2c1-5 2-10 2-14z"/>
+    </svg>
+    Iron<span>Feather</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#lore">Lore</a></li>
+    <li><a href="#discord">Discord</a></li>
+    <li><a href="https://www.youtube.com/@IronFeatherActual/streams" target="_blank">Stream</a></li>
+    <li><a href="#org">Org</a></li>
+    <li><a href="#merch">Merch</a></li>
+    <li><a href="#social">Socials</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow">// Operator · Pilot · Streamer //</div>
+  <h1 class="hero-title">
+    Iron Feather
+    <span class="thin">IronFeatherActual</span>
+  </h1>
+  <div class="hero-divider">
+    <div class="hero-divider-line"></div>
+    <div class="hero-divider-gem">✦</div>
+    <div class="hero-divider-line r"></div>
+  </div>
+  <p class="hero-motto">
+    <span>Focus</span> &nbsp;·&nbsp; <span>Elevate</span> &nbsp;·&nbsp; <span>Conquer</span>
+  </p>
+  <div class="hero-cta">
+    <a href="https://www.youtube.com/@IronFeatherActual/streams" class="btn-primary" target="_blank">Watch Live</a>
+    <a href="https://streamlabs.com/toatsoulindustries/merch" class="btn-secondary" target="_blank">View Merch</a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 01 — About //</div>
+      <h2 class="section-heading">Who is <em>IronFeatherActual</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          <em>IronFeatherActual</em> is a Star Citizen streamer and independent operator who does a little bit of everything the 'verse has to offer — and does all of it well. Mining, hauling, ground combat, ship combat. No specialization. Maximum adaptability.
+        </p>
+        <p>
+          The <strong>Iron Feather</strong> brand was built on a simple idea: the iron is the resolve that gets the job done, the feather is the precision that does it right. Together they define a standard — not a ceiling.
+        </p>
+        <p>
+          Every stream is live, unfiltered, and unpredictable — because that's what the 'verse actually is. Whether a mining run goes sideways, a freight route turns into a firefight, or everything goes exactly to plan, you'll see it all happen in real time.
+        </p>
+      </div>
+      <div>
+        <div class="about-stats reveal">
+          <div class="stat-card">
+            <div class="stat-icon">⛏️</div>
+            <div class="stat-title">Specialty</div>
+            <div class="stat-val">Mining Ops</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🚀</div>
+            <div class="stat-title">Role</div>
+            <div class="stat-val">Combat Pilot</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🚛</div>
+            <div class="stat-title">Trade</div>
+            <div class="stat-val">Freight Runner</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🔫</div>
+            <div class="stat-title">Ground</div>
+            <div class="stat-val">Tactical Operator</div>
+          </div>
+        </div>
+        <div class="about-quote reveal" style="margin-top:20px;">
+          <p>"I don't work for empires. I work alongside people worth flying with."</p>
+          <cite>— IronFeatherActual</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LORE -->
+<section id="lore">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 02 — Lore //</div>
+      <h2 class="section-heading">The <em>Backstory</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="lore-body reveal">
+      <p>
+        Born in the lower commercial districts of <em>ArcCorp — Area 18</em>, Caelus "Iron" Ferrox grew up beneath a sky he couldn't see. ArcCorp is a planet that ate its own horizon — every surface paved, every skyline owned by a corporation, every citizen a resource on someone's balance sheet. His mother worked logistics for a mid-tier shipping firm. His father ran security detail for an ArcCorp subsidiary until the contract dried up and so did he.
+      </p>
+      <p>
+        Caelus learned early that on ArcCorp, you either climb the corporate ladder or you get swept under it. He chose a third option — he left. At seventeen he signed on as a deck hand on a freelance hauler operating out of Stanton. By twenty-two, he held a UEE combat pilot certification earned the hard way through contracted escort runs in jump corridors that polite pilots avoided.
+      </p>
+      <p>
+        He took the callsign <em>IronFeatherActual</em> as a statement: the iron is the resolve forged in ArcCorp's concrete canyons, the feather is the precision that kept him alive out in the black, and <em>Actual</em> means you're always talking to the one who makes the calls.
+      </p>
+      <p>
+        Today he operates across Stanton and beyond — pulling ore from asteroid fields, running freight through contested lanes, and taking ground and space combat contracts when the credits demand it. He found <em>Roma Stellarum</em> not through recruitment, but through reputation. They heard his callsign before they met the man. That's how he prefers it.
+      </p>
+      <div class="lore-tags">
+        <span class="lore-tag">ArcCorp Native</span>
+        <span class="lore-tag">Former Escort Pilot</span>
+        <span class="lore-tag">Independent Contractor</span>
+        <span class="lore-tag">Roma Stellarum</span>
+        <span class="lore-tag">Stanton Operator</span>
+        <span class="lore-tag">Versatile Class</span>
+      </div>
+    </div>
+    <div class="lore-dossier reveal">
+      <div class="dossier-grid">
+        <div class="dossier-field">
+          <div class="dossier-label">Callsign</div>
+          <div class="dossier-value">IronFeatherActual</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Birth Location</div>
+          <div class="dossier-value">ArcCorp · Area 18</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Affiliation</div>
+          <div class="dossier-value">Roma Stellarum</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Operator Class</div>
+          <div class="dossier-value">Versatile</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Status</div>
+          <div class="dossier-value">Active · Independent</div>
+        </div>
+        <div class="dossier-field">
+          <div class="dossier-label">Clearance</div>
+          <div class="dossier-value">UEE Combat Certified</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCORD -->
+<section id="discord">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 03 — Community //</div>
+      <h2 class="section-heading">Join the <em>Crew</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="social-grid">
+      <a href="https://discord.gg/87yqBVehzP" class="social-card reveal" target="_blank">
+        <div class="social-platform">// Discord //</div>
+        <div class="social-handle">Iron Feather HQ</div>
+        <div class="social-desc">The main hub for the Iron Feather community. Mission planning, org ops, Star Citizen discussion, and the occasional chaos. Come fly with us.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT / STREAM -->
+<section id="content">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 04 — Stream //</div>
+      <h2 class="section-heading">What We <em>Do Here</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="content-grid">
+      <div class="content-card reveal">
+        <div class="content-icon">⛏️</div>
+        <div class="content-title">Mining Operations</div>
+        <div class="content-desc">Deep-core asteroid runs, quantanium extraction, and the satisfying grind of pulling ore from the black. Relaxed, commentary-heavy, and occasionally very explosive.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🚛</div>
+        <div class="content-title">Freight & Hauling</div>
+        <div class="content-desc">High-value cargo runs through contested territory. Every route is a calculated risk. Watch live as the math either works out — or doesn't.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🚀</div>
+        <div class="content-title">Ship Combat</div>
+        <div class="content-desc">Escort missions, pirate engagements, org fleet operations. The kind of dogfights that end up in highlight reels. Or hard lessons. Sometimes both.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🔫</div>
+        <div class="content-title">Ground Ops</div>
+        <div class="content-desc">Bunker runs, outpost assaults, and tactical ground combat across moons and planets. Boots on the ground, eyes on the objective.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🏛️</div>
+        <div class="content-title">Roma Stellarum Events</div>
+        <div class="content-desc">Org fleet operations, multi-crew missions, and large-scale coordinated play. The 'verse is better with people worth flying alongside.</div>
+      </div>
+      <div class="content-card reveal">
+        <div class="content-icon">🌌</div>
+        <div class="content-title">Exploration & Lore</div>
+        <div class="content-desc">Star Citizen has one of the richest universes in gaming. Expect deep dives, lore discussions, and the occasional philosophical tangent at 2am.</div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top: 48px;" class="reveal">
+      <a href="https://www.youtube.com/@IronFeatherActual/streams" class="btn-primary" target="_blank">Watch Live on YouTube →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ORG -->
+<section id="org">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 04 — Organization //</div>
+      <h2 class="section-heading">Roma <em>Stellarum</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="org-layout">
+      <div class="org-seal reveal">
+                <div class="org-seal-ring">
+          <div class="org-seal-inner">
+            <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACvAK8DASIAAhEBAxEB/8QAHQAAAQQDAQEAAAAAAAAAAAAAAAEFBgcCAwgECf/EAEAQAAEDAwIDBAgDBwMDBQAAAAECAwQABREGIQcSMRNBUWEIFCIycYGRoRVCUiMzcoKxssEWJGI0c5JDU1Rj8f/EABsBAAEFAQEAAAAAAAAAAAAAAAYAAgQFBwED/8QAOREAAQMCAggFAgQGAgMAAAAAAQIDEQAEBSESEzFBUWFxkQYiMoGhUtEUscHwFSMkJTNiQnLS4fH/2gAMAwEAAhEDEQA/AOV6KKKvqp6KKKKVKlpKKKVKiilopUqSiigdaVKsmkKcdQ2hJUtaglIHeScAUKBSopOxBwR51JOFVvF14n6WtpTzJkXiKhQ8U9qkn7A026siGBqq8QSMerT5DWPDldUP8UzTGnocpp+j5dKmzupKKmHDvh7qbWrk/wDB7POkNxYD8kOJZVyKWhOUNhWMFSlYASDk11a0oEqNcSkqMCohSVvmxJUJ9UeZFkRnknCm3mlNqHxCgCK006m0lFLSUqVHfRRRSpUCiigUqVBopaO6lSpVrK1cysZwBskDoMd3wrGir04faEh6W0hK1lqGOl24tw1yY7LqcpijkJSSD1cO3X3c4G9VOL4uxhbQW5mpRhKRtJ/e0/rAqdY2Ll4spTkBmTwFUZRRvjc79/xoq2qDUgdk6YOgWIiIM8ajFwWtyQZCexLBbSAOTlz7wPf4nO+BHzRRXAmK6TNG1FKCQFAAHIwcgH/8pPrXa5Vm+i3B9e47ac9nmTGW9KPl2bKyPvimz0gIAtvGrV0YJ5Um5uPAeTgDg/uqeehJB9Y4szZpGRDtDxz5rW2gfbNNfphwRE44TngMCbBiyPieTkP3RVWHf7iUf6/rNTSj+lCudU7Um0HrS+6Pfnu2i5zIomW+REUlt1QALiCEqAzgKScEHqKjVG9WakhQg1ESopMisnnXHnC48446s9VLWVE/M1hS4re/EkMxIst1pSWZYWWFnovkVyqx8DtXchXNteetrEWRIbecYjuuoYR2jqkJJCE5xzK8BkgZ861eVT3gLcUQOI8Vl0gNT2XIigehKhlIPxKQPnUPEbldrauPoTpFIJjjGZ+K97RlL7yW1GATE9agJ61lzEoCMDAJPQZ38/lVn8c9BM6flIv1nZ7O2SnOR1lI2juncY8EK3wO4gjwqrqZhmJMYlbJuWTke4O8HmKdeWjlo8WnNo+aKKWkqfUWsiN96QAk8oBJOwA769a0JUN6kPCq1i4cRrIw4AptMkPKHiGwV/1SK8bx4WrC31bEgnsJp1snXupbG0kDvWfB2ytXziHbYslsLjsqVJdQeig2OYA+RVyirP8ASO1SiLZWtMRnMyZpDsrB9xkHIB/iUPonzpggKicP+KeqZfq6ng3Hxb4yPeeXIWhSGx9x8Aa8uvNKvWjSk3VWsJAlakuzyW2WAfYjE7q+KkoTgDonI6negO5UzfYzb3bx/lwnVp3qUrzTHBIIKjyAopZSu2sHWEDzSdI8AMu5ggDrVVb0CigVoVClHd4V75NqmR7BBvbrSkwpr7zDDhGErU0EFQB6H94Poa8bLi2nUutq5VpOUnAOD86sO/cW9UXbhjaNGvzGuzhyXlOOCK0FLbwjsk+7gcpLm4wTkZzimLKwRojrT0BJB0jVdUd9B3NLT6ZXTvoHQMydXXMp2S3FjJPxLiz/AEFNXp0wey1vpy4hP/UWxbRPiW3Sf6OCp76D0HsOGV3nqGFS7upIPiG2kD+qjTX6dsDn01pe6hP7ma/HJ8lthQH1bNDKXf7ue3xVwUf0Xz81yaMZz1Gd96VWOY8oIGdgTmikomqnoqQ37WV/vel7Np24T3noFpDgjtqIwOdXN8TjoPKo93UGuFIJBI2V0KIGVFbIkh6LKZlR3C28ytLjax1SoHIP1FPGiNKXzWV9bs1hiF+Qoc7i1HlaYbHvOOK6JQPH5DJ2rzW52Ha9TMuSUNXCFGlYdCkey+0FYVsd8FOT49K83FjRUAJIGz98achJkHZzrpRiXB4jcMn1ICczYqm3Ed7MhIzj5LAI8iK5ZQ24sK5W1EoTzLwM8oHUnwFX4m1PcLrwm/2Z52dpCatAnMKPMuMkkcjoP5gM9euDg9xpt4X6RjTo+u3nUoWHVSLbHI6AbrKh8+z+lZxgd9b4OzcPtHSYUUlPEEmFJI3FOU8RB30W4jbO362m1iHACDzgSCORz96pOigZwM9e+itMoPr291SzhBMag8R7O68QlDjqmcnuK0FI+5FRMKCtwasdGlhP4Lw9RQE8twt0h91ake8prn3+acBQ8uaq3HH2EW2peMB06ueBUDBr3wxpxT2sbElvzRxgirFFibuPHCTdXk8zVttsZaUkbF9XOlB+KUhR+OKqjjpqxvUeqExILgct1tCmmlg7OuE+2seWwSD4DPfUnn6ou2qGLbZ7Bhq66kYQbi+NuyQ0C0oAjoklLiifAgDrTBxjstn0uiz6ctbfMtDK5Mp9YHaPLUeVJV4DCVYSNhn50EYBaajEWRdZuhGihP0hIhSj1VITxonxS41to4WfRMqPEk5AdBBNVqKBW0NKWsJbSpSj0SkZJp7tWitYXVQTbdK3yXzdC3AdI+vLitIUpKfUYoRSCrYKYKWrJtvAjixOI5dHyY6T+aU+0z9lKz9qlFr9F/iNKwZkuwW9J688tTih8kIP9ajLvrZG1Y717C2eVsSao9OMjIJGd8dalWqtC3ey2KFqaOBc9Nz0gxrpHSezBOxbdHVpxJykpVtkbE1eFr9E2USk3TXDCB3piW9SvutY/pVy8JuFtu4fWW42Zq8zr1b7gQp6LPZaLIVjCiEAfmGAQSQcCoFzjLCAC2qTwg/nUprD3FZLEU2eihB9R4E2JRThUpciSfPmeUB9kim30yIHrvBV6QE5VCuUV4YGfeKmz/eKtmy2u32W1RrTaojcSDFR2bDDeeVtOScDPdua9TrbTqQh1tDiQoKAWkEAg5Bwe8EZB7jQ0LqLrXgb5+attTLOr5RXA9w4ZTNLcPTq/Wwctzs09jZ7SfZkSHCM9o73ttpT7RHvH2R7Oc1XNd1cauDDHE27RrlL1VcLeqIx2LEdMdDrKMnKlYJB5lHGTnuHhVQXb0UNSNAm1ass8sdwkMOsE/Mc4oltcWYUmXVwo7s4FVL9i4D5E5VzvHW228lTrIeQM5QVFOdvEbjx+Veqw2qffL1Cs1sYL86a+iOw2PzLUcD5d58s1Z929HPirBBLNng3FI74k9sk/JZSasf0b+DDlpF51HxHsRjlttUaLElgZSnGXH/ZOx6JSQQQeYjG1SnsRYQ0VpUD0NeDdo4pYSoQKluorPZuDvBibZLMUGcqEt+fMxhclwDAJPgVkBKe5IPeSTxcOm5ye+rx9Iy/TYsdGn03eTNYnkPFExXaPsMoVhDZd6rBP6gVez1Oao6mYY0pDZWoyVGZpXTgWqBkBXQPBDVELUell6QvBS5IjsKZCFn/AKiMRjA80g4Plg+NOXD8J0poTUomL3tlwmBxZ/PyoRyH4kcv1qIWjS/+pOHVq1VptaoeprWgtKUyeUyFMnAB/wCfJy4Pf0Oc7N2pdUzdT6TgWuAwE3PUM8Ga2gcqS40ltvA8AohCyO7FZ2/hjd5cuotzooU4NYk/8FJJJP8A1UnSIPERRc1eLYZQp0SoJ8p+oGAB1BgEe9VZg7ZG/wDmkqyuNmnYWmImmLTEIWpqG72zmN3VlYKln4knHkAO6q2rScNv28Qtk3DfpVMdASPmJoRvLZVq8Wl7RHyJrMEg7Her+9HO5MXDSNwscnlWYz6lKQfzNOpwfuFD51QHfVg6abu2g0WPXMNKptpns9nLSnblJUQtpXgcpylXiMfGo8V2ab6wNtpQtR8nNQzjqRIFTcEfNvc62JSB5uhyn2MVYHBGwfhl61C9JSAq2Om1srV3IC1OKV5ZBRVRcRr6NR6zuN0QrLCnOzj/APaR7KfqBn51aGvNQ+r2OTC02syJWsJ3axVN7EsraaQr4KKgUeXteFQPi3pmNpOXZbWwUrc/DguQ6B+9dLi+ZXw6AeQFUnh5WliJu7n/ACOiEjgEgaZ5ebLrNWOLJi0DDPpQZJ4knyjtn2qHRpEiM+l+M+6w8j3XGllCh8CNxUvtPFjiXagEw9c37kT0Q9KLyfo5zCoVQAScDGT4nA+vdR8ttC/UAaGErUn0mKuK0+klxQhcofmWq4gf/Jt6QT82ympfafSwvCOUXbRtukDvVFmONH6KChVC6w0/J01elWuVJhSXAy09zxZKHkYcbSsDmSSMjm/z0IpoqGrDrR0ToD2y/KpAu30GNKuv7T6VGjH8JuWn79BJ6lvsn0j6KSftVi8P+LWhtdXM2vT1ylOzg0p5TD0JxtQQnGVEkcveO/vr59irx4R6709wi0FKuiGWrvrG+YLUQKw3DjJ/d9sodCo5XyD2iOTPL1qtvMGYSiWgdI7BP3qXb37ileciK7N2pCQN6hfA7U87WPC2z6hujjbk+SHRIU2gITzpdWnZI6bAU2ekVrK6aF4cG92V1puebhHZa7VsLQoElS0kHqClJHcfAihwW6y9qd8xVsXUhvWbomtGueOugNH3mZZbi/dH7lDXyPR48FRKVYB95ZSk7EHIJG9V3efSxtiMizaMmv8A6VTJqGh/4oSo/eqj426w0/xGat2rosf8K1C22Id1gqPMl5I3beaX+YDdJBwoDl6gZqtIsd+U8GY7LjzquiG0lRPyFE1thFsGwp0Gd8n7bqqHb54r0Wz0gV0hpfj3xM19rG36Y05arDbFzneUu9guQWWxutwlasYSkE9PAd9XlxRvbNutXqK5AS2lvt5bqsDlbSM5PcM4Jx5VW3omaBOkdLT9b39gMzpzZQwlWCpmKk5J271qH0SnxqB+k1rJ1cX8HQ5iXdFdtKAP7tgH2UfMjHwSfGoJZZuLoItwNEbxv5zXs4t1loh0nSO7hVTa013qDUc+XzXae1a3HVFiCH1BptHcOUbZxufMmorXpgwZM71n1Zsr9Xjrku47m0Y5j8sivMeu9FCEpQNFNVCiTmauD0atQCPdJ2nHnMJlJ9ZjZ/8AcQMLA+KcH+WpFpzTTTHHC6LDQESA2q4MJ7kuSQkbfAhw1C7Tp59PCm162sn7K72eW86tSR+8aDnf48vX+EqFS6+6+jW7T8jV8BAE++xo8eGyd+yW0FhxR8QhS8DxPL51l+KsuP3r7lhtdlpQ4LBAnoUSZ4TRnZLS3btouf8AhCweKSCfhUDtUF9IC8Iuev3IrKwpq3MpjZHTnyVL+hVj5VXlSbV2lrjYbRbLheVrTPuqnXTHX76EDlwpf/JRUTju7984jNH+CtsM2LbTCtJKRE8SDBPeaF8RW45crW6IJzjhOY+Kyq+OAU6BftEXDSVybQ+lhSiplX52HDnb4Lzv3Eg1Ry2gfd2NOujbzdNMXxu+wGlLTGIS+k55Ftq2KFEdAcbHxArw8SYUrEbFTSDCxBSf9hs77Pen4RfJtbkLVmk5Hof3NWZo2wO2ji3a9OzVKeRZ0S5ENxQ/eMrAU2r4hSl58waaPSUkIc1tDjpIyxb083kVLUf6YqyoF1tOqrrp/VtkdCnIzqoU1pWA6y2+kgBY/wCLnLv0IUcVAWbYniDeOIV0SjtFNNJat58FIUSnHxS1j+egbDb1f8RTfXgKdUgJUOC1LIPedLpRLd26fwhtmDOmqU80hM/ERVRUUdRnxrJba0BBWMBaeZO/UZI/wa1SgmkUpSiSoknzpKKK7SorJtJUdulDaCo+XjW8DAwBTgJpqlRXZfoZzfWOEDkXO8O6vt48ApKFj+40yenLO7LROnbcDj1i5uOkeIbaI/q5Xl9BmcF2fVVsJ3bkxpAHkpC0n+wUx+nVN57/AKWtoV+6hyJBHmtxKR/YaFEsxi5HOfiauy5NhPKPmuebRAdudzjwGPfeWE58B3n5DJroPhzpRi4X2HYLZHRHacVl9aE4UGk7rUT3nHj3kVRmmLy3Yu3mNR0vzlp7NntPcaT+ZXmTsMfGpjw+17r+wXwajgylJidksyDIjBUVxlBBUnGBvnlAwQckb03HbG5vnRKglpPE+o7ch8D3irfAMTtcNt1FKSp9fAekbMz8mOU11ZxAv0OOlenYADcW3pQJJT7qMJCktD4J5SfikeNcbcY1uSNdSZrhV/uWm3EAn3UgcoA+HLVk6Z1ydUWB2O7HeauJfLs91SgoPKWorKwfNWcjuAAG1VvxamR5F/ZjMjLkVnkdV5k5CfkD968MPWtjFBaJGQSdL4M/l3rzfs0Lwhd84fMpQCegkH9e1Z8LdeSdE/jnYQLXJ/EbU/EBlQ23SlagOXdQyU+KD7KtsjaoW4orcUshIJOcJSEj5AbCsae9CWZWoNX2y049h98F0+DafaWf/EGil5bdshb6sgBJ6AUMthbyktJ3mB71eHo/LZuHDJ23uYUlEqQw4k/pWkH+ijUe4I6aRd3Yl2uDZchWNKo8NtYylckuKWteO8J5k488eFOGiZidMcQtdWBpvDJQu4RGkjvA5gkDzDiR8qz1RqyHw80bD0lZnEv39EcNr5Pa9XcVutavFZUThPXoTt1yh8XS7m4ZswZuChSTwSpJKjO71aJPPjRu1qUtNOXByaCgeZBAA+JqB8fL4i8a8djMOc7FtbEUEHIK8kuH/wAjj+Wq9rdLakMSnWZSHG5CFkOpczzBXfnPf41prUcNs27K0bt2zISAJ48/fbQXd3Crh9TqtpNe3uyDT9oG+t6f1IzMktJfgugsTWVJCg4yr3gQdjjZWPKowlRT0NbUOg9djUy4abuWlMuDJQg1FaWthwOI2jOr4vWgXbHcmdX8PnCsIAcdtqVkoksncpbPgR0SfIg5AFYejkYzKNRxo6y4lMppxsqHtFspVy5HcdsEeOajnCTiUixNN2O/LUq2Z/28gDmMbJ90jqUZ8N0+Y6WKm3w7TrJnV9mWy5ar0j1a4qZUFNhxRBafBG2Cr2VeBVnvNZHi6b62Zew6+8xUBoOfUEnSCSeMTG+TGcg0e2Crd9bd1b5QfMnhIgkctk7o4Z1z3rq3ptmsrzAaThpia6hAxsE8xIH0NMtXjZ7RbtTcROIVguaPYkOJcbWB7bS0L5QtPmOb5jI76p/Ulnmafvku0T0gPxl8pI6LHVKh5EYI+NaBg+LIuCLVf+RKEHqFJBke5g/+6F7+xU1LyfSVKHQgnLtTdWbaCo+ApEIKvIU7WCBCuFwZiTrxGs8dxQQuVIbcWhsHYqIQknbrRAMhJqpJkwK8IAAwKWrB496XsWleIU+32O/xbg0OzUWG2188cltJ5VKxyE/m9knZQzvVfV1pwOIChvpriChRSav/ANCCb2WvL7byrAk2tLgHiW3U/wCFmmP0zpvrPGNMYHIh2qO3jwKitZ/uFeP0SLh6pxwtzWcJlxJUf4nsysfdFM/pJy1XLjtqbswpwty0RUJTuTyNoRgfMGqfVgYoV/6z+lWIUTZBPOobpWzSL9eWbexlCVe085j922Oqv8DzIrpXVbNj0VwlLcmGw66pnlbiOpCkJSdm0EHqSdz/ADHupk4JaLas8BU+ehJUjDklXUKWN0tjxCc7+JNQb0gdUru+oxaG3MtQjzPYOxdI6fyp2+JVQXcXh8RYwm0azabzJ6bT1OwcAZoubthgWGKdX/lV+Z2J9vUrnlUV0Xem7JFu0tfKpzsEdij9bnMQB8N8/AVE5Drsh9x95ZW44orWo9SSck1vPStK0JTkkHptjuPn5VoSLNtp9x8epcT7CBQau/cdYbt1elEx1JkmtVWx6NMBLuqrlPcT7UWEEoyOhcUBn6JP1ph4OaLGrdQKcmoV+FQsLkd3aqPutA+eCT5DzFWHw+uMeHxE4hTy3liOpIS20n3uRakpQkDvJASB5ihLxTiaXLW5sWc1hIJ5aSkgDqQT+zVxgtmUPNXLmSSTHsCZ9opm1Cu5P8Zr/wD6dQXbu4yiFGPcyS2jtXlH8oQkbE/mUMZIp9c0/YeFmlpGopJTcr+QUsSHxnL6hsG0noBuoq94gHcZxTta1Wbh5Z5d61PLZRe7q4qTMCPadWtRKgy2nqUpzjOwzkk9Ko/iNrKfrG8+tyE9hEZymLGCshtJ6knvUe8/ADYVR4bb3OLuoYalNsgJSpWzWaIiAfpmctmZJzIFWd26zYoU6vN5RJA+mTM9f/nOo086488t55anHHFFa1qO6lE5JPxNYVtYbS4l0qfaa5GysBefbII9lOAdznvwNjvWo1p4AGQoNMnM1kaSlpK7TadNMqs34u03f0SDbnPYdcjr5XGc9HBsQcd4I3Ge/FW8xw01DZ2DO0Nq5uREkI5ww/7LchBHfjKFgjxA+VUcDUz4fcQ71pE+rN4m21SuZUR1RAST1KFflP1B8KHMfsb95GssVgkbUKAKVd9h7Tyq2wu5tm1aFwnLcoSCO20VKIF1laa4rRL3fre9aHLgDHuLTm7ZKgEl5te4UjISojJKTnqMGnb0jLFHdfs19J7JKnPU5LiRn2feSrzwOf7U9jiHw+1XaDAvoVGbdHtsTWSQk+KVpyAfAjBpuuzcW86Ml6QgXyHfEISly0vIfSXwUbpYdT1JxlKVgYOQDg9Qth65RiFvdPMqaU35FSDolGyQT9M7CTkAQTFELjbS7V1ltwLCvMMxIVwI5+2/IVVmstJ3bSk/1a4NBTKyTHlN7tPp8Qe4+KTuPvTCdwR47V0Rw8uNs11oRVhvbIelQ0CPLZc2WOXZDo7wrbGe5QPjvTGvtLy9J6gctz5LjCh2kZ/GA62TsfIjoR4/EUZ4Fj6rl9dheDRfR2UPqH5xwzGWwcxPCwy2m6YMtq7g8DTJNkvzJTkqS4XHXDlSj37Af0FeVa87DpQtWTgdKwooJ3CqcDeam/AWb6hxo0hIzgG6stE+Th7M/wB9Tqwaaf1BxOvmo5COZyZdZTkQKGyEdqr9qfl0+veKgPDTTL9xntXZ/tG4sdwKaKCQp1wHblI3wD1I79hXTGnbcmx2wvupBmPAZH6fBHy6ms08Z+IE2xVbsHzEQft9+2/I+8NYQUtpu3xvlA4n6jyG7vTVxFvsTR2jnSwBiMgJaSf/AFXj7oPz9o+Qrk56Q8/JckPuKcddUVuKPVSick/Wp9xz1T+N6l/DIz3PDtylJUoHZx4++rzx7o+B8arzNXHgvBzh9jrnB/MczPIbh+p68qpvEuI/irnVIMpRl1O8/p7VuByNqkUDSU97SU7VEw+qW2OgBlSx7UlwqCQlA/Tk7q8sDPc/8F9Cp1NNXc7o2r8Iir5Sjp6w515M/pGxV8QO81LeLc4aivtv4f2UJCI6w9PU2MNx0pGMHGwCEkk+ZSOu1SL/AMRRfpsLbanzOK3JSMyOp2cp47ItrhH9Kbl7fkkbyTkPb7cKfdEGFoLg+zdJaQlSmTNcT+Zx1z92j445B9agWgLfrOZbZTmmo6WJFzfD828yByNoIJIQzkEqIKlErAO5wMYyZfervoq53BhzUl+t6bVbiBCtKXO0KlAYDj4RnJxsG+gHXckV59TcarHCYLOnoL094J5ULdQWWEeG3vEeQA+NBFsL9Rc1FsVuvK0lFQOgBMpTnAMTJzjYIMUSum2SEax0JQ2IAB8x4niJ2celMWp9BWDStqdv2sr7NvU9zIZjIWW/WHP08xyspHUnbA88VTy1cy1K5UpySeVPQeQ8qctTX+66jui7jd5apD6tkjoltP6Up6JHl9c011o+D2V1bMzdu6azt3JHJIED3iTQnf3DLzn8hGikdzzJooopKtqg1kaKDRXa5RW5pH5lfIUNN43V17hWynpTXmpXCpVoabo9t71XVlmdfaUrKZjDziVt+SkJOFJ8xuPOrct3DvhvfIiZNn530HcORZ6lKSfMHJB+Irnqs2HnWXA6y6tpwdFoUUn6ih3F8BfvF622ultK4Akp7SI9suVWlhijVunQeZSsdAD3j98av6Vwzu1vuzd70xqV9Fwa2/37QWXR+la0j2gf+SSfOsNf2+5au0sq2XWxu2/UEQ9rEUj9rHkKHvIQ6OnMPyrwcgdaqnTTt71BNFve1gbeg/mnXBxKT5Dfc+W1WVbODSEJEoawuXbqGe1ht8qT8DzEn60G37Awt5teIXY1qM0kNmY4EpyKeIIO0xFEVq5+NbUm1YOgr1DSEdYOc8xFUQ6hbTi23EKQtBKVpUMKSR1BHcakmhtLO32WH5CVt29pX7RY2Lh/Qn/J7vjVl37QvZT0N3W+ovyMYcEqJyyUDG2Hkq5s9Njn4VMdE6dZfDYDCWrfHwkISMBRH5R5eJqxxXxo0LSbb1Ebc4HSQDPt3r1wrwoUua+89Cd289iRHvnTpoLT7Mdlmc4yhpptIEVoDASB+bH9PrTPxn1iNP6ecXGcxOlZYhjO6f1OfIfcpqcXmYzFir7RxDLTaCt1ZOEoQBk/YVytrK53TX2tVG3RJEgK/ZQoyE5UGgepHcT7xPQZ8qC/DGGHGL43Nx/ibzVOzkJ57TynjVxjuJqtmPJ615JA3DiP051Es53JyfOnDTlmn3+8sWq3NFx95XXGzae9avBIG5NWRZeDtwbS2q7kOyVDPqrbwaaR/G6QSf4W0n+IVMIfDG5ohqiDU6rRGXjmj2eH2KVfxOKV2i/iomtGv/GOHMpKWnRO45kdgCT8A8aDbXw/duEKcQY4ZT87PkjhXuYZvbNhY0voOCYkaM32S7vNQW0g/mW23jmWokk8xAT4Z615LNwgtzMJce7Xa5zg8rnkIZ/YIeVnOVkZWvfxV8qjt+4RtWhtdxa1yuARup2cOzz/ADpUD9jVX3m63RmQ7DTqWXcWEnAdRJe7NfwC8HHyocw3DV36Vfwy7gEyo6tQUTxKjv4QQOVW13eJtVD8WxJGQGkIA5AfrPWrk1Rp7hBpWMr8UhsqeA9mMiU44+s+HKF7fE4FUlqe42643JTlpszFphp9ltltalqI8VqUTk/DAH3pqUSSSep3NJRphGCqsPM6+t1R3qUY9kyR3k0P32IC58qG0oTyAnvS0UJUUqyAOhG4BpKvKraWkNFFKuVlW9pvA5lDfw8KVtvl3V739KzNeiUxXkpU5ClAyCSQD3DxpO+iin0yiiitjaFvvJbZaKlrISlCASSfIVwkASa6ASYFYdx8Kn2gdN3EBE+XKlw43vNsNPKbU55nBGE/c+VezR2jEQyiddkJckj2kMndLZ8T4q+w86sWw2p+6y+ybJS2nd1wjZI/yT4VnviPxUjQUxbHLer7fftxrRfD/hTVAXV9lvCf/L7d+Fb9PWh67SzkqTHScuud/wAB5mp+eygQ0NMoShKBytoHSliR49vhpZZSG2Wx8z5nxJqKcQNTsaesci7SAlTg9iMyT+8cPup+HefIGslJexG4Sy0JkwBz/faim4uUqBccMITnVd8fNWltr/S8J3LjoDk9QPRPVLfz94+WPGvDoN/StwhIslo1Jc9Ny5CQl7LTaXZa/wDv77eCBy/M71VtwlyJ85+bLdU7IfcLji1dVKJyTXmrc7fws0zhqLNCylQzJEGVcSCCCBu4AbZrLnsdW7equFJBByAM5DgCNnOp7xH4eXvTYVc0ynLpBB9uRuHWj/8AYMnA/wCQOPHFRNnUF+jtdkxe7m033IRLcA+ma3SdUakkwTCfv1zdjFPIWlSVFJT0wd9x5GmVxQAqzw+0uU24bvylahsIEZcxsnpUG7fZU7pWoKQd0/v5rZNlyJLnaypD0hz9TrhWfqa8iiSd6CSaSrAAAQBlUbPaaKKKKVdpN80tFFKlRSHPhRRvSrte2loNJXvUWiiipFpHS798UX3HAzCQrlWsEFSj4JH+T96j3V2zaNF14wkVKs7J69eDLCZUaa7Pa5t2lerQWStXVSjslA8VHuq0tKaZh2RsOjD8xScLeI6eISO4fc052u3xLbETFhMJaaT3DqT4k9586e7Da3btM7BtQQhI5nFn8qc9w7zWXY74ndvQUI8jfyev2/OtYwTwxb4WnXPeZzjuHT77elFjtUi6SuyZHK2ndxwjZA/yfKrHt0OPAiJjRkcjafHqT3knxot8OPBjJjxmwhtP1J8T4mtNwkY/Yo/mP+Kza7ulXCoHpqxeeVcq0RsrVPlpUCSsIZQCSonA26k+Vcy8U9WL1RqFSmFq/DYuW4qf1DvcPmrH0Aqe8d9WrhxRpiEVIekthctwbYaPRA/ixv5DHfVJ1q3gDw8GW/4i8PMr08hvPvu5daAvFeKhSvwTRyHq68Pbfz6UUBRTkjG4I6dxorFauUZrTTQUKxcUEjNaFHJzSqJJyaxryUZr1SIopKKKZT6KKKKVKiiiilSoo+VFIaVdr//Z" alt="Roma Stellarum" style="width:140px;height:140px;object-fit:contain;border-radius:50%;"/>
+          </div>
+        </div>
+      </div>
+      <div class="org-text reveal">
+        <p>
+          <em>Roma Stellarum</em> — Rome of the Stars. An organization built not on blind loyalty to empire, but on the strength of those who fly together. The Roman aesthetic isn't nostalgia. It's a philosophy: discipline, purpose, and the understanding that civilization is built by those who show up.
+        </p>
+        <p>
+          IronFeatherActual found Roma Stellarum through reputation rather than recruitment. After holding a position during a contested mining operation while outnumbered, no introductions were needed. <strong>Actions spoke first.</strong>
+        </p>
+        <p>
+          Within the org, he operates as a <em>Versatile Operator</em> — the kind of pilot who fills whatever gap the mission demands. No rank-chasing. No politics. Just results.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCH -->
+<section id="merch">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 05 — Merch //</div>
+      <h2 class="section-heading">Iron Feather <em>Store</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <p class="merch-intro reveal">
+      Rep the brand. Wear the callsign. Every piece is designed around the Iron Feather identity — built for people who operate with focus, precision, and no excuses.
+    </p>
+    <div class="merch-grid">
+      <div class="merch-item reveal">
+        <div class="merch-item-icon">👕</div>
+        <div class="merch-item-name">Tees & Shirts</div>
+        <div class="merch-item-sub">Iron Feather branded apparel</div>
+      </div>
+      <div class="merch-item reveal">
+        <div class="merch-item-icon">🧥</div>
+        <div class="merch-item-name">Hoodies</div>
+        <div class="merch-item-sub">For cold ops and cold nights</div>
+      </div>
+      <div class="merch-item reveal">
+        <div class="merch-item-icon">☕</div>
+        <div class="merch-item-name">Mugs & Drinkware</div>
+        <div class="merch-item-sub">Focus. Elevate. Conquer. — daily</div>
+      </div>
+      <div class="merch-item reveal">
+        <div class="merch-item-icon">🎒</div>
+        <div class="merch-item-name">Accessories</div>
+        <div class="merch-item-sub">Hats, bags & more</div>
+      </div>
+    </div>
+    <div class="merch-cta-block reveal">
+      <div class="merch-cta-text">
+        <h3>Visit the Full Store</h3>
+        <p>All merch is printed on demand and ships worldwide. Powered by Streamlabs.</p>
+      </div>
+      <a href="https://streamlabs.com/toatsoulindustries/merch" class="btn-primary" target="_blank">Shop Now →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section id="social">
+  <div class="section-wrap">
+    <div class="section-header reveal">
+      <div class="section-num">// 06 — Socials //</div>
+      <h2 class="section-heading">Find <em>IronFeatherActual</em></h2>
+      <div class="section-rule"></div>
+    </div>
+    <div class="social-grid">
+      <a href="https://twitter.com/ironfeather" class="social-card reveal" target="_blank">
+        <div class="social-platform">// Twitter · X //</div>
+        <div class="social-handle">@IronFeather</div>
+        <div class="social-desc">Stream updates, Star Citizen takes, and whatever the 'verse throws at us today.</div>
+      </a>
+      <a href="https://instagram.com/ironfeather" class="social-card reveal" target="_blank">
+        <div class="social-platform">// Instagram //</div>
+        <div class="social-handle">@IronFeather</div>
+        <div class="social-desc">Behind the stream, brand visuals, and life as an independent operator.</div>
+      </a>
+      <a href="https://www.youtube.com/@IronFeatherActual" class="social-card reveal" target="_blank">
+        <div class="social-platform">// YouTube //</div>
+        <div class="social-handle">@IronFeatherActual</div>
+        <div class="social-desc">Star Citizen guides, ship reviews, gameplay, livestreams, and Shorts. This is where the content lives.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Iron<span>Feather</span></div>
+  <div class="footer-motto">Focus · Elevate · Conquer</div>
+  <div class="footer-copy">© IronFeatherActual · Roma Stellarum · All rights reserved</div>
+</footer>
+
+<script>
+// ─── STAR FIELD ───
+const sf = document.getElementById('starfield');
+for (let i = 0; i < 220; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.2 + 0.4;
+  const minOp = (0.05 + Math.random() * 0.1).toFixed(2);
+  const maxOp = (0.4 + Math.random() * 0.5).toFixed(2);
+  s.style.cssText = `
+    width:${size}px;height:${size}px;
+    top:${Math.random()*100}%;
+    left:${Math.random()*100}%;
+    --dur:${2+Math.random()*5}s;
+    --delay:${Math.random()*6}s;
+    --min-op:${minOp};
+    --max-op:${maxOp};
+  `;
+  sf.appendChild(s);
+}
+
+// ─── SCROLL REVEAL ───
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// ─── NAV ACTIVE ───
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--gold)' : '';
+  });
+});
+</script>
+</body>
+</html>
